@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/microSdetect/static/css/main.ccf5b325.css",
-    "main.js": "/microSdetect/static/js/main.7567d588.js",
+    "main.js": "/microSdetect/static/js/main.275ebc6b.js",
     "static/media/mettle-2025-logo.png": "/microSdetect/static/media/mettle-2025-logo.8d4175a2175ad4a7c928.png",
     "static/media/Third.png": "/microSdetect/static/media/Third.66b5c52ee9de9765251d.png",
     "static/media/Fourth.png": "/microSdetect/static/media/Fourth.db661bc223a4304e9c4b.png",
@@ -10,10 +10,10 @@
     "static/media/fbLogo.png": "/microSdetect/static/media/fbLogo.76d6ddb99a8c30b09e90.png",
     "index.html": "/microSdetect/index.html",
     "main.ccf5b325.css.map": "/microSdetect/static/css/main.ccf5b325.css.map",
-    "main.7567d588.js.map": "/microSdetect/static/js/main.7567d588.js.map"
+    "main.275ebc6b.js.map": "/microSdetect/static/js/main.275ebc6b.js.map"
   },
   "entrypoints": [
     "static/css/main.ccf5b325.css",
-    "static/js/main.7567d588.js"
+    "static/js/main.275ebc6b.js"
   ]
 }
