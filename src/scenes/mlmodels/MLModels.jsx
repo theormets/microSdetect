@@ -19,22 +19,14 @@ import {toast} from "react-toastify";
 const MLModels = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.userReducer);
-  const [approvedStatus, setApprovedStatus] = useState(false);
-  // Redirect to signin if not logged in
+  const [approvedStatus, setApprovedStatus] = useState("APPROVED");
+  // Redirect to signin if not logged in (Gracefully handling this case)
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
-    if (!user) {
-      navigate('/signin');
-    }
-    console.log("User: inside mlmodels ", user);
     if(user && user.status!==""){
       setApprovedStatus(user.status);
     }
   }, [user, navigate]);
-  const dispatch = useDispatch();
-  if (!user) {
-    return null;
-  }
   const handleRequest = async () => {
       try {
         const isSuccess = await updateStudentStatus(user._id,"REQUESTED");
@@ -90,14 +82,24 @@ const MLModels = () => {
                             Status: {model.status}
                           </Typography>
                         </CardContent>
+                        {!user && (
+                            <Button>
+                              <Typography variant="body2" color="error" sx={{ ml: 2 }}>
+                                Please log in to use this model.
+                              </Typography>
+                            </Button>
+                        )}
                         <CardActions>
+
                           <Button
                               size="small"
                               color="primary"
                               onClick={() => navigate(`/mlmodels/${model.id}`)}
+                              disabled={!user}
                           >
                             Use Model
                           </Button>
+
                           <Button
                               size="small"
                               color="primary"
@@ -106,6 +108,7 @@ const MLModels = () => {
                             View Details
                           </Button>
                         </CardActions>
+
                       </Card>
                     </Grid>
                 ))}

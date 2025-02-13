@@ -14,7 +14,7 @@ root.render(
   <Provider store={store}>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <BrowserRouter>
+        <BrowserRouter basename="/microSdetect">
         <BackdropContext>
           <App />
         </BackdropContext>
