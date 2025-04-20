@@ -107,7 +107,7 @@ const MLModelUse = () => {
       console.log("result is",result)
 
       // Perform the GET request to fetch the list of images
-      const getResponse = await fetch('http://localhost:8000/yolo/getImages/');
+      const getResponse = await fetch(`http://localhost:8000/yolo/getImages/${imageName}`);
       // if (!getResponse.ok) {
       //   throw new Error('Failed to fetch images');
       // }
