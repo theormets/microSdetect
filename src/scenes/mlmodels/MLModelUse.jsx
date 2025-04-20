@@ -94,7 +94,7 @@ const MLModelUse = () => {
       const formData = new FormData();
       formData.append('image', selectedFile);
       formData.append('filename', imageName);
-      const response = await fetch(`${MODEL_DEV_API}/yolo/upload/`, {
+      const response = await fetch(`${MODEL_DEV_API}/api/upload/`, {
         method: 'POST',
         body: formData,
       });
@@ -107,7 +107,7 @@ const MLModelUse = () => {
       console.log("result is",result)
 
       // Perform the GET request to fetch the list of images
-      const getResponse = await fetch(`http://localhost:8000/yolo/getImages/${imageName}`);
+      const getResponse = await fetch(`${MODEL_DEV_API}/api/getImages/${imageName}`);
       // if (!getResponse.ok) {
       //   throw new Error('Failed to fetch images');
       // }
