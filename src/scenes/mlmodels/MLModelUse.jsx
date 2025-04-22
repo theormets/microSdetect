@@ -97,6 +97,8 @@ const MLModelUse = () => {
       const response = await fetch(`${MODEL_DEV_API}/api/upload/`, {
         method: 'POST',
         body: formData,
+        mode: 'cors',        // Add this line
+        credentials: 'omit'  // Add this line
       });
       console.log(response);
       if (!response.ok) {
@@ -107,7 +109,11 @@ const MLModelUse = () => {
       console.log("result is",result)
 
       // Perform the GET request to fetch the list of images
-      const getResponse = await fetch(`${MODEL_DEV_API}/api/getImages/${imageName}`);
+      const getResponse = await fetch(`${MODEL_DEV_API}/api/getImages/${imageName}`, {
+        method: 'GET',  // optional since GET is default
+        mode: 'cors',
+        credentials: 'omit'
+      });
       // if (!getResponse.ok) {
       //   throw new Error('Failed to fetch images');
       // }
