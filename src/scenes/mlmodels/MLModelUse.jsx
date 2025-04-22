@@ -9,7 +9,13 @@ import {
   TextField,
   Grid,
   CircularProgress,
-  Stack, useMediaQuery
+  Stack,
+  useMediaQuery,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio
 } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -51,6 +57,7 @@ const MLModelUse = () => {
   const [openPost, setOpenPost] = useState(false);
   const [openPostData, setOpenPostData] = useState(null);
   const [openCollection, setOpenCollection] = useState(false);
+  const [analysisType, setAnalysisType] = useState('');
   const navigate = useNavigate();
   // Mock model data - replace with actual API call
   const { formReducer, postsReducer } = useSelector(
@@ -86,14 +93,24 @@ const MLModelUse = () => {
     dispatch(createPost(args));
   };
 
+  const handleAnalysisTypeChange = (event) => {
+    setAnalysisType(event.target.value);
+  };
+
   const handleSubmit = async () => {
-    if (!selectedFile || !imageName) return;
+    if (!selectedFile || !imageName || !analysisType) {
+      alert('Please provide an image, name, and select an analysis type (PO or MA)');
+      return;
+    }
+
+    // Add prefix based on selected analysis type
+    const prefixedImageName = analysisType + imageName;
 
     setLoading(true);
     try {
       const formData = new FormData();
       formData.append('image', selectedFile);
-      formData.append('filename', imageName);
+      formData.append('filename', prefixedImageName);
       const response = await fetch(`${MODEL_DEV_API}/api/upload/`, {
         method: 'POST',
         body: formData,
@@ -109,7 +126,7 @@ const MLModelUse = () => {
       console.log("result is",result)
 
       // Perform the GET request to fetch the list of images
-      const getResponse = await fetch(`${MODEL_DEV_API}/api/getImages/${imageName}`, {
+      const getResponse = await fetch(`${MODEL_DEV_API}/api/getImages/${prefixedImageName}`, {
         method: 'GET',  // optional since GET is default
         mode: 'cors',
         credentials: 'omit'
@@ -128,7 +145,8 @@ const MLModelUse = () => {
       const dummyResult = {
         resultImageUrl: `data:image/jpeg;base64,${firstImage.image_data}`,
         _id: '12345', // Replace with actual ID if available
-        prompt: imageName,
+        prompt: prefixedImageName,
+        analysisType: analysisType,
         image: {
           url: previewUrl,
           public_id: 'public_id', // Replace with actual public ID if available
@@ -198,6 +216,30 @@ const MLModelUse = () => {
                   Input Image
                 </Typography>
 
+                {/* Analysis Type Selection */}
+                <FormControl component="fieldset" sx={{ mb: 2, mt: 1 }}>
+                  <FormLabel component="legend">Select Analysis Type</FormLabel>
+                  <RadioGroup
+                    row
+                    name="analysis-type"
+                    value={analysisType}
+                    onChange={handleAnalysisTypeChange}
+                  >
+                    <FormControlLabel
+                      value="PO"
+                      control={<Radio />}
+                      label="Porosity Detection (PO)"
+                      disabled={resultImage}
+                    />
+                    <FormControlLabel
+                      value="MA"
+                      control={<Radio />}
+                      label="Martensitic Analysis (MA)"
+                      disabled={resultImage}
+                    />
+                  </RadioGroup>
+                </FormControl>
+
                 <TextField
                     fullWidth
                     label="Image Name"
@@ -205,6 +247,7 @@ const MLModelUse = () => {
                     onChange={(e) => setImageName(e.target.value)}
                     margin="normal"
                     disabled={resultImage}
+                    helperText={analysisType ? `Will be saved as: ${analysisType}${imageName}` : "Select an analysis type"}
                 />
 
                 <Button
@@ -231,7 +274,7 @@ const MLModelUse = () => {
                     variant="contained"
                     color="primary"
                     onClick={handleSubmit}
-                    disabled={!selectedFile || !imageName || loading}
+                    disabled={!selectedFile || !imageName || !analysisType || loading}
                     fullWidth
                     sx={{ mt: 2 }}
                 >
